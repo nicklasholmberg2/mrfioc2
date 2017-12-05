@@ -4,8 +4,7 @@
 # Macros
 #  P - Prefix for user control
 #  CODE - Event Number to send
-#  SYS - EVG system
-#  D - EVG device
+#  SYSDSOFTEVT - EVG system - EVG device software event with embedded naming convention: $(SYS){$(D)-SoftEvt}
 #  TIMO - Min. time in seconds between soft events
 #
 
@@ -17,7 +16,7 @@ record(longout, "$(P)-Cmd") {
 record(seq, "$(P)-Seq_") {
   # Trigger soft event
   field(DOL1, "$(CODE)")
-  field(LNK1, "$(SYS){$(D)-SoftEvt}EvtCode-SP PP")
+  field(LNK1, "$(SYSDSOFTEVT)EvtCode-SP PP")
   # Disable command
   field(DOL2, "1")
   field(LNK2, "$(P)-Cmd.DISA NPP")

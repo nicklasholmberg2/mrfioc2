@@ -1,12 +1,12 @@
 # linked from mrmSoftSeq.template
-# $(P)InitSeq:Cont-FOut_
-record(fanout, "$(P)TrigSrc:Init-FOut_") {
+# $(PINITSEQ)Cont-FOut_
+record(fanout, "$(PTRIGSRC)Init-FOut_") {
     field( LNK1, "$(P)TrigSrc-Sel")
 }
 
 record(mbbo, "$(P)TrigSrc-Sel") {
     field( DTYP, "Obj Prop uint32")
-    field( OUT , "@OBJ=$(EVG):SEQ$(seqNum), CLASS=SeqManager, PARENT=$(EVG):SEQMGR, PROP=TRIG_SRC")
+    field( OUT , "@OBJ=$(EVG)SEQ$(seqNum), CLASS=SeqManager, PARENT=$(EVG)SEQMGR, PROP=TRIG_SRC")
     field( UDF,  "0")
     field( ZRST, "None")
     field( ONST, "Mxc0")
@@ -41,18 +41,18 @@ record(mbbo, "$(P)TrigSrc-Sel") {
     field( FTVL, "0x02020001")
     field( FFVL, "0x02020002")
     info( autosaveFields_pass0, "VAL")
-    alias("$(P)TrigSrc:0-Sel")
+    alias("$(PTRIGSRC)0-Sel")
 }
 
 # placeholder to OPIs
-record(mbbo, "$(P)TrigSrc:1-Sel") {
+record(mbbo, "$(PTRIGSRC)1-Sel") {
     field(DISP, "1")
-    alias("$(P)TrigSrc:2-Sel")
+    alias("$(PTRIGSRC)2-Sel")
 }
 
 record(mbbi, "$(P)TrigSrc-RB") {
     field( DTYP, "Obj Prop uint32")
-    field( INP , "@OBJ=$(EVG):SEQ$(seqNum), CLASS=SeqManager, PARENT=$(EVG):SEQMGR, PROP=TRIG_SRC")
+    field( INP , "@OBJ=$(EVG)SEQ$(seqNum), CLASS=SeqManager, PARENT=$(EVG)SEQMGR, PROP=TRIG_SRC")
     field( UDF,  "0")
     field( SCAN, "I/O Intr")
     field( ZRST, "None")
@@ -94,11 +94,11 @@ record(mbbi, "$(P)TrigSrc-RB") {
 #(only if TsInpMode = EGU).
 #
 record(ai, "$(P)EvtClkFreq-RB_") {
-    field( INP,  "$(SYS){$(D)-EvtClk}Frequency-RB CP")
-    field( FLNK, "$(P)EvtClkFreq:Cont-RB_")
+    field( INP,  "$(SYSDEVTCLK)Frequency-RB CP")
+    field( FLNK, "$(PEVTCLKFREQ)Cont-RB_")
 }
 
-record(ao, "$(P)EvtClkFreq:Cont-RB_") {
+record(ao, "$(PEVTCLKFREQ)Cont-RB_") {
     field( OUT,  "$(P)Timestamp-RB.PROC")
     field( VAL,  "1")
 }

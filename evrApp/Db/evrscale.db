@@ -24,7 +24,7 @@ record(longout, "$(SN)Div-SP") {
 record(calc, "$(SN)Rate-I") {
   field(DESC, "Output frequency")
   field(INPA, "$(SN)Div-SP NPP")
-  field(INPB, "$(P)Link:Clk-I CP")
+  field(INPB, "$(P)Clk-I CP")
   field(CALC, "B/A")
   field(EGU, "MHz")
   field(PREC, "2")
