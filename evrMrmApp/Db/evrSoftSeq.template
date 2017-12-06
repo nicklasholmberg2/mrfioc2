@@ -104,14 +104,14 @@ record(mbbo, "$(PTRIGSRC)Scale-Sel") {
 
 record(longout, "$(P)TrigSrc-Sel_") {
     field( DTYP, "Obj Prop uint32")
-    field( OUT , "@OBJ=$(EVG)SEQ$(seqNum), CLASS=SeqManager, PARENT=$(EVG)SEQMGR, PROP=TRIG_SRC")
+    field( OUT , "@OBJ=$(EVG):SEQ$(seqNum), CLASS=SeqManager, PARENT=$(EVG):SEQMGR, PROP=TRIG_SRC")
     field( VAL , "0x03000000") # default to None
     info( autosaveFields_pass0, "VAL")
 }
 
 record(longin, "$(P)TrigSrc-RB_") {
     field( DTYP, "Obj Prop uint32")
-    field( INP , "@OBJ=$(EVG)SEQ$(seqNum), CLASS=SeqManager, PARENT=$(EVG)SEQMGR, PROP=TRIG_SRC")
+    field( INP , "@OBJ=$(EVG):SEQ$(seqNum), CLASS=SeqManager, PARENT=$(EVG):SEQMGR, PROP=TRIG_SRC")
     field( UDF,  "0")
     field( SCAN, "I/O Intr")
     field( FLNK, "$(P)TrigSrc-RB")
@@ -162,7 +162,7 @@ record(stringin, "$(P)TrigSrc-RB") {
 #(only if TsInpMode = EGU).
 #
 #record(ai, "$(P)EvtClkFreq-RB_") {
-#    field( INP,  "$(PEVTCLK)Frequency-RB CP")
+#    field( INP,  "$(SYSDEVTCLK)Frequency-RB CP")
 #    field( FLNK, "$(PEVTCLKFREQ)Cont-RB_")
 #}
 #

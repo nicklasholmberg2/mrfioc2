@@ -11,7 +11,7 @@
 
 file "evrbase.db"
 {
-{P="\$(SYS){\$(D)}", OBJ="\$(EVR)", FRF=80.5}
+{P="\$(SYS){\$(D)}", PCNT="\$(SYS){\$(D)}Cnt:", PLINK="\$(SYS){\$(D)}Link:", PRATE="\$(SYS){\$(D)}Rate:", PTIME="\$(SYS){\$(D)}Time:", OBJ="\$(EVR)", OBJBUFRX="\$(EVR):BUFRX", FRF=80.5}
 }
 
 file "fribevrbase.db"
@@ -22,7 +22,7 @@ file "fribevrbase.db"
 file "evrscale.db"
 {pattern
 {IDX, P, SN, OBJ, MAX}
-{0, "$(SYS){$(D)}", "$(SYS){$(D)-PS:$(IDX)}", "$(EVR):PS$(IDX)", "0xffff"}
+{0, "$(SYS){$(D)}Link:", "$(SYS){$(D)-PS:$(IDX)}", "$(EVR):PS$(IDX)", "0xffff"}
 }
 
 file "fribevrout.db"

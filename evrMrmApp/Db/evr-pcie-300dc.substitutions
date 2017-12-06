@@ -39,17 +39,17 @@ file "mrmevrbufrx.db"
 }
 
 file mrmSoftSeq.template {
-pattern { P, EVG, seqNum, NELM }
-{ "$(SYS){$(D)-SoftSeq:0}", "$(EVR):", 0, 2047 }
-{ "$(SYS){$(D)-SoftSeq:1}", "$(EVR):", 1, 2047 }
-{ "$(SYS){$(D)-SoftSeq:2}", "$(EVR):", 2, 2047 }
+pattern { P, PINITSEQ, PTRIGSRC, EVG, seqNum, NELM }
+{ "$(SYS){$(D)-SoftSeq:0}", "$(SYS){$(D)-SoftSeq:0}InitSeq:", "$(SYS){$(D)-SoftSeq:0}TrigSrc:", "$(EVR)", 0, 2047 }
+{ "$(SYS){$(D)-SoftSeq:1}", "$(SYS){$(D)-SoftSeq:1}InitSeq:", "$(SYS){$(D)-SoftSeq:1}TrigSrc:", "$(EVR)", 1, 2047 }
+{ "$(SYS){$(D)-SoftSeq:2}", "$(SYS){$(D)-SoftSeq:2}InitSeq:", "$(SYS){$(D)-SoftSeq:2}TrigSrc:", "$(EVR)", 2, 2047 }
 }
 
 file evrSoftSeq.template {
-pattern { P, EVG, seqNum, NELM }
-{ "$(SYS){$(D)-SoftSeq:0}", "$(EVR):", 0, 2047 }
-{ "$(SYS){$(D)-SoftSeq:1}", "$(EVR):", 1, 2047 }
-{ "$(SYS){$(D)-SoftSeq:2}", "$(EVR):", 2, 2047 }
+pattern { P, PTRIGSRC, PEVTCLKFREQ, SYSDEVTCLK, EVG, seqNum, NELM }
+{ "$(SYS){$(D)-SoftSeq:0}", "$(SYS){$(D)-SoftSeq:0}TrigSrc:", "$(SYS){$(D)-SoftSeq:0}EvtClkFreq:", "$(SYS){$(D)-EvtClk}", "$(EVR)", 0, 2047 }
+{ "$(SYS){$(D)-SoftSeq:1}", "$(SYS){$(D)-SoftSeq:1}TrigSrc:", "$(SYS){$(D)-SoftSeq:1}EvtClkFreq:", "$(SYS){$(D)-EvtClk}", "$(EVR)", 1, 2047 }
+{ "$(SYS){$(D)-SoftSeq:2}", "$(SYS){$(D)-SoftSeq:2}TrigSrc:", "$(SYS){$(D)-SoftSeq:2}EvtClkFreq:", "$(SYS){$(D)-EvtClk}", "$(EVR)", 2, 2047 }
 }
 
 file "sfp.db"

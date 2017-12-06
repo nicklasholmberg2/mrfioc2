@@ -131,7 +131,7 @@ record(longin, "$(PN)Prescaler-RB") {
 record(calc, "$(PN)Res-I") {
   field(DESC, "Resolution")
   field(INPA, "$(PN)Prescaler-RB MS")
-  field(INPB, "$(PLink)ClkPeriod-I CP")
+  field(INPB, "$(PLINK)ClkPeriod-I CP")
   field(CALC, "1e9*(A?A:1)*B")
   field(EGU, "ns")
   field(FLNK, "$(PN)Res-FO_")

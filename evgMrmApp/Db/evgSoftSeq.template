@@ -6,7 +6,7 @@ record(fanout, "$(PTRIGSRC)Init-FOut_") {
 
 record(mbbo, "$(P)TrigSrc-Sel") {
     field( DTYP, "Obj Prop uint32")
-    field( OUT , "@OBJ=$(EVG)SEQ$(seqNum), CLASS=SeqManager, PARENT=$(EVG)SEQMGR, PROP=TRIG_SRC")
+    field( OUT , "@OBJ=$(EVG):SEQ$(seqNum), CLASS=SeqManager, PARENT=$(EVG):SEQMGR, PROP=TRIG_SRC")
     field( UDF,  "0")
     field( ZRST, "None")
     field( ONST, "Mxc0")
@@ -52,7 +52,7 @@ record(mbbo, "$(PTRIGSRC)1-Sel") {
 
 record(mbbi, "$(P)TrigSrc-RB") {
     field( DTYP, "Obj Prop uint32")
-    field( INP , "@OBJ=$(EVG)SEQ$(seqNum), CLASS=SeqManager, PARENT=$(EVG)SEQMGR, PROP=TRIG_SRC")
+    field( INP , "@OBJ=$(EVG):SEQ$(seqNum), CLASS=SeqManager, PARENT=$(EVG):SEQMGR, PROP=TRIG_SRC")
     field( UDF,  "0")
     field( SCAN, "I/O Intr")
     field( ZRST, "None")

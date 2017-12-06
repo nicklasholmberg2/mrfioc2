@@ -39,17 +39,17 @@ file "mrmevrbufrx.db"
 }
 
 file mrmSoftSeq.template {
-pattern { P, EVG, seqNum, NELM }
-{ "$(SYS){$(D)-SoftSeq:0}", "$(EVR):", 0, 2047 }
-{ "$(SYS){$(D)-SoftSeq:1}", "$(EVR):", 1, 2047 }
-{ "$(SYS){$(D)-SoftSeq:2}", "$(EVR):", 2, 2047 }
+pattern { P, PINITSEQ, PTRIGSRC, EVG, seqNum, NELM }
+{ "$(SYS){$(D)-SoftSeq:0}", "$(SYS){$(D)-SoftSeq:0}InitSeq:", "$(SYS){$(D)-SoftSeq:0}TrigSrc:", "$(EVR)", 0, 2047 }
+{ "$(SYS){$(D)-SoftSeq:1}", "$(SYS){$(D)-SoftSeq:1}InitSeq:", "$(SYS){$(D)-SoftSeq:1}TrigSrc:", "$(EVR)", 1, 2047 }
+{ "$(SYS){$(D)-SoftSeq:2}", "$(SYS){$(D)-SoftSeq:2}InitSeq:", "$(SYS){$(D)-SoftSeq:2}TrigSrc:", "$(EVR)", 2, 2047 }
 }
 
 file evrSoftSeq.template {
-pattern { P, EVG, seqNum, NELM }
-{ "$(SYS){$(D)-SoftSeq:0}", "$(EVR):", 0, 2047 }
-{ "$(SYS){$(D)-SoftSeq:1}", "$(EVR):", 1, 2047 }
-{ "$(SYS){$(D)-SoftSeq:2}", "$(EVR):", 2, 2047 }
+pattern { P, PTRIGSRC, PEVTCLKFREQ, SYSDEVTCLK, EVG, seqNum, NELM }
+{ "$(SYS){$(D)-SoftSeq:0}", "$(SYS){$(D)-SoftSeq:0}TrigSrc:", "$(SYS){$(D)-SoftSeq:0}EvtClkFreq:", "$(SYS){$(D)-EvtClk}", "$(EVR)", 0, 2047 }
+{ "$(SYS){$(D)-SoftSeq:1}", "$(SYS){$(D)-SoftSeq:1}TrigSrc:", "$(SYS){$(D)-SoftSeq:1}EvtClkFreq:", "$(SYS){$(D)-EvtClk}", "$(EVR)", 1, 2047 }
+{ "$(SYS){$(D)-SoftSeq:2}", "$(SYS){$(D)-SoftSeq:2}TrigSrc:", "$(SYS){$(D)-SoftSeq:2}EvtClkFreq:", "$(SYS){$(D)-EvtClk}", "$(EVR)", 2, 2047 }
 }
 
 file "sfp.db"
@@ -115,7 +115,7 @@ pattern
 {"$(SYS){$(D)-Out:Back4}", "$(SYS){$(D)-Out:Back4}Src:", "$(EVR):Backplane4", "RX19 (4)", 61}
 {"$(SYS){$(D)-Out:Back5}", "$(SYS){$(D)-Out:Back5}Src:", "$(EVR):Backplane5", "TX19 (5)", 61}
 {"$(SYS){$(D)-Out:Back6}", "$(SYS){$(D)-Out:Back6}Src:", "$(EVR):Backplane6", "RX20 (6)", 61}
-{"$(SYS){$(D)-Out:Back7}", "$(SYS){$(D)-Out:Back0}Src:", "$(EVR):Backplane7", "TX20 (7)", 61}
+{"$(SYS){$(D)-Out:Back7}", "$(SYS){$(D)-Out:Back7}Src:", "$(EVR):Backplane7", "TX20 (7)", 61}
 {"$(SYS){$(D)-Out:FPUV0}", "$(SYS){$(D)-Out:FPUV0}Src:", "$(EVR):FrontUnivOut0", "TCLKA", 61}
 {"$(SYS){$(D)-Out:FPUV1}", "$(SYS){$(D)-Out:FPUV1}Src:", "$(EVR):FrontUnivOut1", "TCLKB", 61}
 }
