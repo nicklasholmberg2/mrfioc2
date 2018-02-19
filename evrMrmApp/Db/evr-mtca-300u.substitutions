@@ -132,8 +132,8 @@ file "mrmevroutint.db"
 file "evrcml.db"
 {pattern
 {PLINK, ON, ONFREQ, ONPAT, ONWFCALC, ONBT, OBJ}
-{"$(SYS){$(D)}Link:", "$(SYS){$(D)-Out:FPUV0}", "$(SYS){$(D)-Out:FPUV0}Freq:", "$(SYS){$(D)-Out:FPUV0}Pat:", "$(SYS){$(D)-Out:FPUV0}WfCalc:", "$(SYS){$(D)-Out:FPUV0}BunchTrain:", "$(EVR):CML0"}
-{"$(SYS){$(D)}Link:", "$(SYS){$(D)-Out:FPUV1}", "$(SYS){$(D)-Out:FPUV1}Freq:", "$(SYS){$(D)-Out:FPUV1}Pat:", "$(SYS){$(D)-Out:FPUV1}WfCalc:", "$(SYS){$(D)-Out:FPUV1}BunchTrain:", "$(EVR):CML1"}
+{"$(SYS){$(D)}Link:", "$(SYS){$(D)-Out:TCLKA}", "$(SYS){$(D)-Out:TCLKA}Freq:", "$(SYS){$(D)-Out:TCLKA}Pat:", "$(SYS){$(D)-Out:TCLKA}WfCalc:", "$(SYS){$(D)-Out:TCLKA}BunchTrain:", "$(EVR):CML0"}
+{"$(SYS){$(D)}Link:", "$(SYS){$(D)-Out:TCLKB}", "$(SYS){$(D)-Out:TCLKB}Freq:", "$(SYS){$(D)-Out:TCLKB}Pat:", "$(SYS){$(D)-Out:TCLKB}WfCalc:", "$(SYS){$(D)-Out:TCLKB}BunchTrain:", "$(EVR):CML1"}
 }
 
 # Pulse generators w/o a prescaler set NOPS=1
