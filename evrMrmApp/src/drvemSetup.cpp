@@ -177,8 +177,8 @@ static const EVRMRM::Config mtca_evr_300 = {
     16, // pulse generators
     8,  // prescalers
     4,  // FP outputs
-    0,  // FPUV outputs (really 2, handled specially)
-    16, // RB outputs  (via external IFB)
+    18,  // FPUV outputs (16 via external IFB + 2 handled specially)
+    0, // RB outputs
     8,  // Backplane outputs
     0,  // FP Delay outputs
     0,  // CML/GTX outputs

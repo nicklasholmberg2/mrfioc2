@@ -105,9 +105,25 @@ file "mrmevrout.db"
 {"$(SYS){$(D)-Out:FP1}", "$(SYS){$(D)-Out:FP1}Src:", "$(EVR):FrontOut1", "OUT1 (TTL)"}
 {"$(SYS){$(D)-Out:FP2}", "$(SYS){$(D)-Out:FP2}Src:", "$(EVR):FrontOut2", "OUT2 (TTL)"}
 {"$(SYS){$(D)-Out:FP3}", "$(SYS){$(D)-Out:FP3}Src:", "$(EVR):FrontOut3", "OUT3 (TTL)"}
-# default to tri-state for backplane lines
+# default to tri-state for IFB and backplane lines
 pattern
 {ON, ONSRC, OBJ, DESC, DEFAULT}
+{"$(SYS){$(D)-Out:FPUV00}", "$(SYS){$(D)-Out:FPUV00}Src:", "$(EVR):FrontUnivOut0", "UNIV0", 61}
+{"$(SYS){$(D)-Out:FPUV01}", "$(SYS){$(D)-Out:FPUV01}Src:", "$(EVR):FrontUnivOut1", "UNIV1", 61}
+{"$(SYS){$(D)-Out:FPUV02}", "$(SYS){$(D)-Out:FPUV02}Src:", "$(EVR):FrontUnivOut2", "UNIV2", 61}
+{"$(SYS){$(D)-Out:FPUV03}", "$(SYS){$(D)-Out:FPUV03}Src:", "$(EVR):FrontUnivOut3", "UNIV3", 61}
+{"$(SYS){$(D)-Out:FPUV04}", "$(SYS){$(D)-Out:FPUV04}Src:", "$(EVR):FrontUnivOut4", "UNIV4", 61}
+{"$(SYS){$(D)-Out:FPUV05}", "$(SYS){$(D)-Out:FPUV05}Src:", "$(EVR):FrontUnivOut5", "UNIV5", 61}
+{"$(SYS){$(D)-Out:FPUV06}", "$(SYS){$(D)-Out:FPUV06}Src:", "$(EVR):FrontUnivOut6", "UNIV6", 61}
+{"$(SYS){$(D)-Out:FPUV07}", "$(SYS){$(D)-Out:FPUV07}Src:", "$(EVR):FrontUnivOut7", "UNIV7", 61}
+{"$(SYS){$(D)-Out:FPUV08}", "$(SYS){$(D)-Out:FPUV08}Src:", "$(EVR):FrontUnivOut8", "UNIV8", 61}
+{"$(SYS){$(D)-Out:FPUV09}", "$(SYS){$(D)-Out:FPUV09}Src:", "$(EVR):FrontUnivOut9", "UNIV9", 61}
+{"$(SYS){$(D)-Out:FPUV10}", "$(SYS){$(D)-Out:FPUV10}Src:", "$(EVR):FrontUnivOut10", "UNIV10", 61}
+{"$(SYS){$(D)-Out:FPUV11}", "$(SYS){$(D)-Out:FPUV11}Src:", "$(EVR):FrontUnivOut11", "UNIV11", 61}
+{"$(SYS){$(D)-Out:FPUV12}", "$(SYS){$(D)-Out:FPUV12}Src:", "$(EVR):FrontUnivOut12", "UNIV12", 61}
+{"$(SYS){$(D)-Out:FPUV13}", "$(SYS){$(D)-Out:FPUV13}Src:", "$(EVR):FrontUnivOut13", "UNIV13", 61}
+{"$(SYS){$(D)-Out:FPUV14}", "$(SYS){$(D)-Out:FPUV14}Src:", "$(EVR):FrontUnivOut14", "UNIV14", 61}
+{"$(SYS){$(D)-Out:FPUV15}", "$(SYS){$(D)-Out:FPUV15}Src:", "$(EVR):FrontUnivOut15", "UNIV15", 61}
 {"$(SYS){$(D)-Out:Back0}", "$(SYS){$(D)-Out:Back0}Src:", "$(EVR):Backplane0", "RX17 (0)", 61}
 {"$(SYS){$(D)-Out:Back1}", "$(SYS){$(D)-Out:Back1}Src:", "$(EVR):Backplane1", "TX17 (1)", 61}
 {"$(SYS){$(D)-Out:Back2}", "$(SYS){$(D)-Out:Back2}Src:", "$(EVR):Backplane2", "RX18 (2)", 61}
@@ -116,8 +132,8 @@ pattern
 {"$(SYS){$(D)-Out:Back5}", "$(SYS){$(D)-Out:Back5}Src:", "$(EVR):Backplane5", "TX19 (5)", 61}
 {"$(SYS){$(D)-Out:Back6}", "$(SYS){$(D)-Out:Back6}Src:", "$(EVR):Backplane6", "RX20 (6)", 61}
 {"$(SYS){$(D)-Out:Back7}", "$(SYS){$(D)-Out:Back7}Src:", "$(EVR):Backplane7", "TX20 (7)", 61}
-{"$(SYS){$(D)-Out:FPUV0}", "$(SYS){$(D)-Out:FPUV0}Src:", "$(EVR):FrontUnivOut0", "TCLKA", 61}
-{"$(SYS){$(D)-Out:FPUV1}", "$(SYS){$(D)-Out:FPUV1}Src:", "$(EVR):FrontUnivOut1", "TCLKB", 61}
+{"$(SYS){$(D)-Out:TCLKA}", "$(SYS){$(D)-Out:TCLKA}Src:", "$(EVR):FrontUnivOut16", "TCLKA", 61}
+{"$(SYS){$(D)-Out:TCLKB}", "$(SYS){$(D)-Out:TCLKB}Src:", "$(EVR):FrontUnivOut17", "TCLKB", 61}
 }
 
 file "mrmevroutint.db"

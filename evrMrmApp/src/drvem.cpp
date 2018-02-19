@@ -286,11 +286,6 @@ try{
 
     } else if(formfactor==formFactor_mTCA) {
 
-        // mapping to TCLKA and TCLKB as UNIV16, 17
-        // we move down to UNIV0, 1
-        outputs[std::make_pair(OutputFPUniv,0)]=new MRMOutput(SB()<<n<<":FrontUnivOut0", this, OutputFPUniv, 16);
-        outputs[std::make_pair(OutputFPUniv,1)]=new MRMOutput(SB()<<n<<":FrontUnivOut1", this, OutputFPUniv, 17);
-
         shortcmls.resize(2);
         shortcmls[0]=new MRMCML(n+":CML0", 0,*this,MRMCML::typeCML,form);
         shortcmls[1]=new MRMCML(n+":CML1", 1,*this,MRMCML::typeCML,form);
