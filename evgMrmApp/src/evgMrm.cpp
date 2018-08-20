@@ -39,6 +39,7 @@
 evgMrm::evgMrm(const std::string& id, bus_configuration& busConfig, volatile epicsUInt8* const pReg, const epicsPCIDevice *pciDevice):
     mrf::ObjectInst<evgMrm>(id),
     TimeStampSource(1.0),
+    MRMSPI(pReg+U32_SPIDData),
     irqExtInp_queued(0),
     m_buftx(id+":BUFTX",pReg+U32_DataBufferControl, pReg+U8_DataBuffer_base),
     m_pciDevice(pciDevice),
@@ -115,9 +116,15 @@ evgMrm::evgMrm(const std::string& id, bus_configuration& busConfig, volatile epi
     init_cb(&irqExtInp_cb, priorityHigh, &evgMrm::process_inp_cb, this);
     
     scanIoInit(&ioScanTimestamp);
+
+    if(busConfig.busType==busType_pci)
+        mrf::SPIDevice::registerDev(id+":FLASH", mrf::SPIDevice(this, 1));
 }
 
 evgMrm::~evgMrm() {
+    if(getBusConfiguration()->busType==busType_pci)
+        mrf::SPIDevice::unregisterDev(name()+":FLASH");
+
     for(int i = 0; i < evgNumEvtTrig; i++)
         delete m_trigEvt[i];
 
@@ -250,21 +257,31 @@ evgMrm::getDbusStatus() const {
 }
 
 void
-evgMrm::enable(bool ena) {
-    SCOPED_LOCK(m_lock);
-    if(ena)
-        BITSET32(m_pReg, Control, EVG_MASTER_ENA);
-    else
-        BITCLR32(m_pReg, Control, EVG_MASTER_ENA);
+evgMrm::enable(epicsUInt16 mode) {
+    if(mode>2)
+        throw std::runtime_error("Unsupported mode");
 
-    BITSET32(m_pReg, Control, EVG_DIS_EVT_REC);
-    BITSET32(m_pReg, Control, EVG_REV_PWD_DOWN);
-    BITSET32(m_pReg, Control, EVG_MXC_RESET);
+    SCOPED_LOCK(m_lock);
+    epicsUInt32 ctrl = NAT_READ32(m_pReg, Control);
+    if(mode!=0)
+        ctrl |= EVG_MASTER_ENA;
+    else
+        ctrl &= ~EVG_MASTER_ENA;
+    if(mode==2)
+        ctrl |= EVG_BCGEN|EVG_DCMST;
+    else
+        ctrl &= ~(EVG_BCGEN|EVG_DCMST);
+
+    ctrl |= EVG_DIS_EVT_REC|EVG_REV_PWD_DOWN|EVG_MXC_RESET;
+
+    NAT_WRITE32(m_pReg, Control, ctrl);
 }
 
-bool
-evgMrm::enabled() const {
-    return (READ32(m_pReg, Control) & EVG_MASTER_ENA) != 0;
+epicsUInt16 evgMrm::enabled() const {
+    epicsUInt32 ctrl = NAT_READ32(m_pReg, Control);
+    if(!(ctrl&EVG_MASTER_ENA)) return 0;
+    else if(!(ctrl&EVG_BCGEN)) return 1;
+    else return 2;
 }
 
 void
@@ -300,6 +317,14 @@ evgMrm::isr_vme(void* arg) {
 
     // Call to the generic implementation
     evg->isr(evg, false);
+}
+
+void
+evgMrm::isr_poll(void* arg) {
+    evgMrm *evg = static_cast<evgMrm*>(arg);
+
+    // Call to the generic implementation
+    evg->isr(evg, true);
 }
 
 void

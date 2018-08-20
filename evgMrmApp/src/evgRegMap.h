@@ -101,7 +101,6 @@
 //
 #define  U32_FPGAVersion        0x002C  // FPGA Firmware Version
 
-#define FPGAVersion_ZERO_MASK   0x00FFFF00
 #define FPGAVersion_TYPE_MASK   0xF0000000
 #define FPGAVersion_FORM_MASK   0x0F000000
 #define FPGAVersion_FORM_SHIFT  24
@@ -150,6 +149,10 @@
 // RF Recovery
 //
 #define  U32_RxInitPS           0x0088  // Initial Value For RF Recovery DCM Phase
+
+// SPI device access (eg. FPGA configuration eeprom)
+#define U32_SPIDData    0x0A0
+#define U32_SPIDCtrl    0x0A4
 
 //=====================
 // Trigger Event Control Registers
@@ -260,6 +263,8 @@
 #define  EVG_DIS_EVT_REC        0x40000000
 #define  EVG_REV_PWD_DOWN       0x20000000
 #define  EVG_MXC_RESET          0x01000000
+#define  EVG_BCGEN              0x00800000
+#define  EVG_DCMST              0x00400000
 
 /**************************************************************************************************/
 /* Input                                                                                          */
