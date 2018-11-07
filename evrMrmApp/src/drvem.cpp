@@ -170,7 +170,7 @@ try{
         throw std::runtime_error("Firmware 2 version < 207 not supported");
 
     if(ver.firmware()==2 && ver<MRFVersion(2,7,6))
-        printf("Warning: Recommended minimum firmware 2 version is 207.6\n");
+        printf("Warning: Recommended minimum firmware 2 version is 207.6, found %s\n", ver.str().c_str());
 
     if(ver.firmware()!=0 && ver.firmware()!=2)
         printf("Warning: Unknown firmware series %u.  Your milage may vary\n", ver.firmware());
@@ -602,6 +602,21 @@ EVRMRM::clockSet(double freq)
     }
 }
 
+epicsUInt16
+EVRMRM::clockMode() const
+{
+    return (READ32(base, ClkCtrl)&ClkCtrl_clkmd_MASK)>>ClkCtrl_clkmd_SHIFT;
+}
+
+void
+EVRMRM::clockModeSet(epicsUInt16 mode)
+{
+    epicsUInt32 cur = READ32(base, ClkCtrl);
+    cur &= ~ClkCtrl_clkmd_MASK;
+    cur |= (epicsUInt32(mode)<<ClkCtrl_clkmd_SHIFT)&ClkCtrl_clkmd_MASK;
+    WRITE32(base, ClkCtrl, cur);
+}
+
 epicsUInt32
 EVRMRM::uSecDiv() const
 {
@@ -628,7 +643,11 @@ EVRMRM::setExtInhib(bool v)
 bool
 EVRMRM::pllLocked() const
 {
-    return (READ32(base, ClkCtrl) & ClkCtrl_cglock) != 0;
+    epicsUInt32 cur = READ32(base, ClkCtrl);
+    epicsUInt32 mask = ClkCtrl_cglock;
+    if(version()>=MRFVersion(2, 7, 0))
+        mask |= ClkCtrl_plllock;
+    return (cur&mask)==mask;
 }
 
 bool
@@ -1033,6 +1052,7 @@ void EVRMRM::setTimeSrc(epicsUInt32 raw)
 }
 
 OBJECT_BEGIN2(EVRMRM, EVR)
+  OBJECT_PROP2("Clock Mode", &EVRMRM::clockMode, &EVRMRM::clockModeSet);
   OBJECT_PROP2("DCEnable", &EVRMRM::dcEnabled, &EVRMRM::dcEnable);
   OBJECT_PROP2("DCTarget", &EVRMRM::dcTarget, &EVRMRM::dcTargetSet);
   OBJECT_PROP1("DCRx",     &EVRMRM::dcRx);

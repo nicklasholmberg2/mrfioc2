@@ -21,8 +21,12 @@
 #include <epicsInterrupt.h>
 #include <epicsTime.h>
 #include <generalTimeSup.h>
+#include <epicsStdio.h>
 
 #include <longoutRecord.h>
+
+#include "mrmpci.h"
+#include "fct.h"
 
 #include "mrf/version.h"
 #include <mrfCommonIO.h> 
@@ -36,7 +40,41 @@
 
 #include <epicsExport.h>
 
-evgMrm::evgMrm(const std::string& id, bus_configuration& busConfig, volatile epicsUInt8* const pReg, const epicsPCIDevice *pciDevice):
+static
+EVRMRM::Config evm_evru_conf = {
+    "mTCA-EVM-300 (EVRU)",
+    16, // pulse generators
+    3,  // prescalers
+    8,  // FP outputs
+    0,  // FPUV outputs
+    0,  // RB outputs
+    0,  // Backplane outputs
+    0,  // FP Delay outputs
+    0,  // CML/GTX outputs
+    MRMCML::typeTG300,
+    8,  // FP inputs
+};
+
+static
+EVRMRM::Config evm_evrd_conf = {
+    "mTCA-EVM-300 (EVRD)",
+    16, // pulse generators
+    3,  // prescalers
+    8,  // FP outputs
+    0,  // FPUV outputs
+    0,  // RB outputs
+    0,  // Backplane outputs
+    0,  // FP Delay outputs
+    0,  // CML/GTX outputs
+    MRMCML::typeTG300,
+    8,  // FP inputs
+};
+
+evgMrm::evgMrm(const std::string& id,
+               const Config *conf,
+               bus_configuration& busConfig,
+               volatile epicsUInt8* const pReg,
+               const epicsPCIDevice *pciDevice):
     mrf::ObjectInst<evgMrm>(id),
     TimeStampSource(1.0),
     MRMSPI(pReg+U32_SPIDData),
@@ -46,9 +84,12 @@ evgMrm::evgMrm(const std::string& id, bus_configuration& busConfig, volatile epi
     m_id(id),
     m_pReg(pReg),
     busConfiguration(busConfig),
+    m_RFref(0),
+    m_fracSynFreq(0),
+    m_RFDiv(1u),
+    m_ClkSrc(ClkSrcInternal),
     m_seq(this, pReg),
     m_acTrig(id+":AcTrig", pReg),
-    m_evtClk(id+":EvtClk", pReg),
   shadowIrqEnable(READ32(m_pReg, IrqEnable))
 {
     epicsUInt32 v, isevr;
@@ -78,21 +119,21 @@ evgMrm::evgMrm(const std::string& id, bus_configuration& busConfig, volatile epi
         m_dbus.push_back(new evgDbus(name.str(), i, pReg));
     }
 
-    for(int i = 0; i < evgNumFrontInp; i++) {
+    for(unsigned i = 0; i < conf->numFrontInp; i++) {
         std::ostringstream name;
         name<<id<<":FrontInp"<<i;
         m_input[ std::pair<epicsUInt32, InputType>(i, FrontInp) ] =
                 new evgInput(name.str(), i, FrontInp, pReg + U32_FrontInMap(i));
     }
 
-    for(int i = 0; i < evgNumUnivInp; i++) {
+    for(unsigned i = 0; i < conf->numUnivInp; i++) {
         std::ostringstream name;
         name<<id<<":UnivInp"<<i;
         m_input[ std::pair<epicsUInt32, InputType>(i, UnivInp) ] =
                 new evgInput(name.str(), i, UnivInp, pReg + U32_UnivInMap(i));
     }
 
-    for(int i = 0; i < evgNumRearInp; i++) {
+    for(unsigned i = 0; i < conf->numRearInp; i++) {
         std::ostringstream name;
         name<<id<<":RearInp"<<i;
         m_input[ std::pair<epicsUInt32, InputType>(i, RearInp) ] =
@@ -119,35 +160,33 @@ evgMrm::evgMrm(const std::string& id, bus_configuration& busConfig, volatile epi
 
     if(busConfig.busType==busType_pci)
         mrf::SPIDevice::registerDev(id+":FLASH", mrf::SPIDevice(this, 1));
+
+    if(pciDevice->id.sub_device==PCI_DEVICE_ID_MRF_MTCA_EVM_300) {
+        printf("EVM automatically creating '%s:FCT', '%s:EVRD', and '%s:EVRU'\n", id.c_str(), id.c_str(), id.c_str());
+        fct.reset(new FCT(this, id+":FCT", pReg+0x10000));
+        evrd.reset(new EVRMRM(id+":EVRD", busConfig, &evm_evrd_conf, pReg+0x20000, 0x10000));
+        evru.reset(new EVRMRM(id+":EVRU", busConfig, &evm_evru_conf, pReg+0x30000, 0x10000));
+    }
 }
 
 evgMrm::~evgMrm() {
     if(getBusConfiguration()->busType==busType_pci)
         mrf::SPIDevice::unregisterDev(name()+":FLASH");
 
-    for(int i = 0; i < evgNumEvtTrig; i++)
+    for(size_t i = 0; i < m_trigEvt.size(); i++)
         delete m_trigEvt[i];
 
-    for(int i = 0; i < evgNumMxc; i++)
+    for(size_t i = 0; i < m_muxCounter.size(); i++)
         delete m_muxCounter[i];
 
-    for(int i = 0; i < evgNumDbusBit; i++)
+    for(size_t i = 0; i < m_dbus.size(); i++)
         delete m_dbus[i];
 
-    for(int i = 0; i < evgNumFrontInp; i++)
-        delete m_input[std::pair<epicsUInt32, InputType>(i, FrontInp)];
+    while(!m_input.empty())
+        m_input.erase(m_input.begin());
 
-    for(int i = 0; i < evgNumUnivInp; i++)
-        delete m_input[std::pair<epicsUInt32, InputType>(i, UnivInp)];
-
-    for(int i = 0; i < evgNumRearInp; i++)
-        delete m_input[std::pair<epicsUInt32, InputType>(i, RearInp)];
-
-    for(int i = 0; i < evgNumFrontOut; i++)
-        delete m_output[std::pair<epicsUInt32, evgOutputType>(i, FrontOut)];
-
-    for(int i = 0; i < evgNumUnivOut; i++)
-        delete m_output[std::pair<epicsUInt32, evgOutputType>(i, UnivOut)];
+    while(!m_output.empty())
+        m_output.erase(m_output.begin());
 }
 
 void evgMrm::enableIRQ()
@@ -181,69 +220,14 @@ evgMrm::getRegAddr() const {
     return m_pReg;
 }
 
-epicsUInt32 
-evgMrm::getFwVersion() const {
-    return READ32(m_pReg, FPGAVersion);
+MRFVersion evgMrm::version() const
+{
+    return MRFVersion(READ32(m_pReg, FPGAVersion));
 }
 
-epicsUInt32
-evgMrm::getFwVersionID(){
-    epicsUInt32 ver = getFwVersion();
-
-    ver &= FPGAVersion_VER_MASK;
-
-    return ver;
-}
-
-formFactor
-evgMrm::getFormFactor(){
-    epicsUInt32 form = getFwVersion();
-
-    form &= FPGAVersion_FORM_MASK;
-    form >>= FPGAVersion_FORM_SHIFT;
-
-    if(form <= formFactor_PCIe) return (formFactor)form;
-    else return formFactor_unknown;
-}
-
-std::string
-evgMrm::getFormFactorStr(){
-    std::string text;
-
-    switch(getFormFactor()){
-    case formFactor_CPCI:
-        text = "CompactPCI 3U";
-        break;
-
-    case formFactor_CPCIFULL:
-        text = "CompactPCI 6U";
-        break;
-
-    case formFactor_CRIO:
-        text = "CompactRIO";
-        break;
-
-    case formFactor_PCIe:
-        text = "PCIe";
-        break;
-
-    case formFactor_PXIe:
-        text = "PXIe";
-        break;
-
-    case formFactor_PMC:
-        text = "PMC";
-        break;
-
-    case formFactor_VME64:
-        text = "VME 64";
-        break;
-
-    default:
-        text = "Unknown form factor";
-    }
-
-    return text;
+std::string evgMrm::getFwVersionStr() const
+{
+    return version().str();
 }
 
 std::string
@@ -427,11 +411,6 @@ evgMrm::setEvtCode(epicsUInt32 evtCode) {
 }
 
 /**    Access    functions     **/
-
-evgEvtClk*
-evgMrm::getEvtClk() {
-    return &m_evtClk;
-}
 
 evgInput*
 evgMrm::getInput(epicsUInt32 inpNum, InputType type) {
