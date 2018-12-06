@@ -181,7 +181,7 @@ static const EVRMRM::Config mtca_evr_300 = {
     18,  // FPUV outputs (16 via external IFB + 2 handled specially)
     0, // RB outputs
     8,  // Backplane outputs
-    0,  // FP Delay outputs
+    2,  // FP Delay outputs
     0,  // CML/GTX outputs
     MRMCML::typeTG300,
     2,  // FP inputs
