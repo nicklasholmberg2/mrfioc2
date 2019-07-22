@@ -1,5 +1,5 @@
 # linked from mrmSoftSeq.template
-# $(PINITSEQ)Cont-FOut_
+# $ (PINITSEQ)Cont-FOut_
 record(fanout, "$(PTRIGSRC)Init-FOut_") {
     field( LNK1, "$(P)TrigSrc-Sel")
 }
