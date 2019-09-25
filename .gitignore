@@ -10,6 +10,7 @@ html/
 rtf
 *.local
 .DS_Store
+.vscode
 
 #documentation output
 epics-*
