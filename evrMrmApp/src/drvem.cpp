@@ -1325,6 +1325,7 @@ EVRMRM::drain_fifo()
                         buf.pos++;
 
                     } else {
+                        buf.drop = true;
                         tbuf->dropped++;
                     }
                 }
